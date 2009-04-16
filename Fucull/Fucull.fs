@@ -15,6 +15,28 @@ drawingArea.AddEvents((int)EventMask.KeyPressMask)
 drawingArea.AddEvents((int)EventMask.PointerMotionMask)
  
 let points = new ResizeArray<Cairo.Point>()
+
+let bottom (point1:(Cairo.Point), point2:(Cairo.Point)) = 
+    match point1, point2 with
+    | _ when point1.Y < point2.Y -> point1
+    | _ when point1.Y > point2.Y -> point2
+
+let top (point1:(Cairo.Point), point2:(Cairo.Point)) = 
+    match point1, point2 with
+    | _ when point1.Y > point2.Y -> point1
+    | _ when point1.Y < point2.Y -> point2
+
+let left (point1:(Cairo.Point), point2:(Cairo.Point)) = 
+    match point1, point2 with
+    | _ when point1.X < point2.X -> point1
+    | _ when point1.X > point2.X -> point2
+    | _ when point1.X = point2.X -> bottom (point1, point2)
+
+let right (point1:(Cairo.Point), point2:(Cairo.Point)) = 
+    match point1, point2 with
+    | _ when point1.X > point2.X -> point1
+    | _ when point1.X < point2.X -> point2
+    | _ when point1.X = point2.X -> top (point1, point2)
  
 let click (x, y) =
     let p = new Cairo.Point(x, y)
